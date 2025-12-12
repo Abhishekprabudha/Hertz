@@ -1,0 +1,15 @@
+{
+  "kpis": [
+    {"label": "Emissions", "value": "-12% YoY", "delta": "-1.8%", "tone": "good"},
+    {"label": "EV Uptime", "value": "93%", "delta": "+1%", "tone": "good"},
+    {"label": "Green Bookings", "value": "41%", "delta": "+3%", "tone": "good"},
+    {"label": "Recycling", "value": "78%", "delta": "-2%", "tone": "warn"}
+  ],
+  "recommendations": [
+    {"tag": "ESG", "text": "Promote eco fare class in city centers with high transit usage.", "why": "Captures willing customers and improves utilisation of low-emission fleet."},
+    {"tag": "Facilities", "text": "Schedule off-peak waste pickups at high-volume lots.", "why": "Lifts recycling rates and reduces congestion during operating hours."}
+  ],
+  "mapBadges": ["Carbon savings", "Eco demand pockets"],
+  "chartText": "Carbon reduction on track with rising adoption of green products.",
+  "explain": "Higher EV uptime and targeted promotions continue to move ESG scorecards in the right direction."
+}

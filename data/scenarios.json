@@ -1,0 +1,14 @@
+{
+  "normal": {
+    "narration": "Operations are running steadily with balanced fleet availability and customer demand.",
+    "signals": ["Utilisation holding near plan", "On-time returns stable", "No major alerts"]
+  },
+  "disrupt": {
+    "narration": "Weather delays and surge demand are stressing the network; watch for choke points.",
+    "signals": ["Airport queues rising", "EV chargers near capacity", "Late returns trending up"]
+  },
+  "correct": {
+    "narration": "Adaptive routing and pricing levers are restoring stability after earlier disruptions.",
+    "signals": ["Utilisation normalising", "Turnaround time improving", "Customer support clearing backlog"]
+  }
+}
