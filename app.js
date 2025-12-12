@@ -3,6 +3,22 @@ const state = {
   scenarios: null,
   activeTab: null,
   activeScenario: null,
+  cache: {},
+  playing: false,
+  voiceReady: false,
+};
+
+const scenarioOrder = ['normal', 'disrupt', 'correct'];
+
+const baseVehicles = [
+  { id: 'SYD-21', label: 'EV Van', top: 62, left: 42 },
+  { id: 'MEL-18', label: 'SUV', top: 78, left: 48 },
+  { id: 'BNE-05', label: 'Sedan', top: 47, left: 55 },
+  { id: 'CNS-09', label: 'EV', top: 36, left: 60 },
+  { id: 'ADL-14', label: 'Truck', top: 70, left: 32 },
+  { id: 'PER-30', label: 'Van', top: 70, left: 8 }
+];
+
   cache: {}
 };
 
@@ -74,6 +90,30 @@ function renderNarration() {
   });
 }
 
+function renderVehicles() {
+  const layer = document.getElementById('vehicleLayer');
+  layer.innerHTML = '';
+
+  baseVehicles.forEach((veh, idx) => {
+    const node = document.createElement('div');
+    node.className = `vehicle ${state.activeScenario}`;
+
+    // add a subtle drift by scenario and index
+    const drift = state.activeScenario === 'disrupt' ? 4 : state.activeScenario === 'correct' ? -2 : 0;
+    const offsetX = ((idx % 2 === 0 ? 1 : -1) * (drift + 2));
+    const offsetY = ((idx % 3 === 0 ? -1 : 1) * (drift + 1));
+
+    node.style.left = `${Math.min(90, Math.max(4, veh.left + offsetX))}%`;
+    node.style.top = `${Math.min(90, Math.max(6, veh.top + offsetY))}%`;
+
+    node.innerHTML = `
+      <div class="dot"></div>
+      <div>${veh.label}</div>
+    `;
+    layer.appendChild(node);
+  });
+}
+
 function renderCenter(data) {
   document.getElementById('tabTitle').textContent = state.config.tabs.find(t => t.id === state.activeTab).label;
   document.getElementById('scenarioPill').textContent = state.activeScenario.charAt(0).toUpperCase() + state.activeScenario.slice(1);
@@ -88,6 +128,8 @@ function renderCenter(data) {
     b.textContent = text;
     badges.appendChild(b);
   });
+
+  renderVehicles();
 }
 
 function renderKPIs(data) {
@@ -134,6 +176,10 @@ async function setActiveTab(tabId) {
   await loadAndRender();
 }
 
+async function setScenario(scenario, { force = false } = {}) {
+  if (!force && state.activeScenario === scenario) return;
+  state.activeScenario = scenario;
+  document.getElementById('scenarioPill').textContent = scenario.charAt(0).toUpperCase() + scenario.slice(1);
 async function setScenario(scenario) {
   if (state.activeScenario === scenario) return;
   state.activeScenario = scenario;
@@ -155,6 +201,58 @@ async function getTabData(tabId) {
   return data;
 }
 
+function wait(ms) {
+  return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function pickVoice() {
+  const voices = speechSynthesis.getVoices();
+  if (!voices.length) return null;
+  const preferred = voices.find(v => /female|woman|samantha|zira|joanna|salli/i.test(v.name));
+  if (preferred) return preferred;
+  const english = voices.find(v => v.lang && v.lang.toLowerCase().startsWith('en'));
+  return english || voices[0];
+}
+
+function speakNarration(text) {
+  return new Promise(resolve => {
+    if (!('speechSynthesis' in window)) return resolve();
+    const utter = new SpeechSynthesisUtterance(text);
+    const voice = pickVoice();
+    if (voice) utter.voice = voice;
+    utter.pitch = 1.05;
+    utter.rate = 1;
+    utter.onend = resolve;
+    utter.onerror = resolve;
+    speechSynthesis.cancel();
+    speechSynthesis.speak(utter);
+  });
+}
+
+async function playStory() {
+  if (state.playing) return;
+  state.playing = true;
+  const btn = document.getElementById('playScenario');
+  const status = document.getElementById('playStatus');
+  btn.classList.add('playing');
+  status.textContent = 'Playing narrated journey...';
+
+  for (const scenario of scenarioOrder) {
+    await setScenario(scenario, { force: true });
+    await speakNarration(state.scenarios[scenario].narration);
+    await wait(1800);
+  }
+
+  status.textContent = 'Completed — replay anytime';
+  btn.classList.remove('playing');
+  state.playing = false;
+}
+
+function hookPlayButton() {
+  const btn = document.getElementById('playScenario');
+  btn.addEventListener('click', playStory);
+}
+
 async function init() {
   [state.config, state.scenarios] = await Promise.all([
     loadJSON('data/config.json'),
@@ -165,6 +263,14 @@ async function init() {
   state.activeScenario = state.config.defaultScenario;
 
   renderTabs();
+  hookPlayButton();
+
+  if ('speechSynthesis' in window) {
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      state.voiceReady = true;
+    });
+  }
+
   renderScenarioControls();
   await loadAndRender();
 }

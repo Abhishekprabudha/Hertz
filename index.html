@@ -16,6 +16,10 @@
     <main class="layout">
       <section class="panel left">
         <div class="card scenario-switcher">
+          <div class="section-heading">Narrated Scenario</div>
+          <div class="scenario-play">
+            <button id="playScenario" class="play-btn">▶ Play story</button>
+            <span id="playStatus" class="muted">Plays Normal → Disrupt → Correct</span>
           <div class="section-heading">Scenario</div>
           <div class="scenario-buttons">
             <button class="scenario-btn" data-scenario="normal">Normal</button>
@@ -40,6 +44,9 @@
             <span id="scenarioPill" class="pill">Normal</span>
           </div>
           <div class="map" id="mapArea">
+            <div class="map-placeholder">Eastern Australia view</div>
+            <div class="badge-stack" id="mapBadges"></div>
+            <div class="vehicle-layer" id="vehicleLayer"></div>
             <div class="map-placeholder">Map View</div>
             <div class="badge-stack" id="mapBadges"></div>
           </div>
