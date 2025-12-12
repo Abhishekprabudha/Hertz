@@ -1,0 +1,15 @@
+{
+  "kpis": [
+    {"label": "Utilisation", "value": "72%", "delta": "+2.1%", "tone": "good"},
+    {"label": "EV Mix", "value": "38%", "delta": "+4%", "tone": "good"},
+    {"label": "Idle Hours", "value": "5.3h", "delta": "-0.6h", "tone": "warn"},
+    {"label": "Maintenance Backlog", "value": "12%", "delta": "-1.4%", "tone": "good"}
+  ],
+  "recommendations": [
+    {"tag": "Fleet", "text": "Shift surplus SUVs to airport stations for weekend surge.", "why": "Keeps conversion high where reservation velocity is strongest."},
+    {"tag": "EV", "text": "Top-up charging at suburban hubs during off-peak rates.", "why": "Reduces downtown queueing and improves charger utilisation."}
+  ],
+  "mapBadges": ["Optimal EV coverage", "Airport demand rising"],
+  "chartText": "Fleet utilisation trending upward with stable dwell times.",
+  "explain": "Vehicle positioning is leaning toward airports; EV share is improving without hurting turnaround time."
+}
