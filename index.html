@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Mobility Control Tower</title>
+  <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+  <div class="app-shell">
+    <header class="topbar">
+      <div class="brand">Mobility Control Tower</div>
+      <nav class="tabs" id="tabBar"></nav>
+    </header>
+
+    <main class="layout">
+      <section class="panel left">
+        <div class="card scenario-switcher">
+          <div class="section-heading">Narrated Scenario</div>
+          <div class="scenario-play">
+            <button id="playScenario" class="play-btn">▶ Play story</button>
+            <span id="playStatus" class="muted">Plays Normal → Disrupt → Correct</span>
+          </div>
+        </div>
+        <div class="card narration">
+          <div class="section-heading">Narration</div>
+          <p id="narrationText" class="muted">Loading...</p>
+        </div>
+        <div class="card signals">
+          <div class="section-heading">Active Signals</div>
+          <ul id="signalList" class="signal-list"></ul>
+        </div>
+      </section>
+
+      <section class="panel center">
+        <div class="card head-card">
+          <div class="title-row">
+            <h2 id="tabTitle">Fleet</h2>
+            <span id="scenarioPill" class="pill">Normal</span>
+          </div>
+          <div class="map" id="mapArea">
+            <div class="map-placeholder">Eastern Australia view</div>
+            <div class="badge-stack" id="mapBadges"></div>
+            <div class="vehicle-layer" id="vehicleLayer"></div>
+          </div>
+        </div>
+        <div class="card duo">
+          <div class="chart" id="chartArea">
+            <div class="section-heading">Chart</div>
+            <p id="chartText" class="muted">Loading chart insight...</p>
+          </div>
+          <div class="explain" id="explainArea">
+            <div class="section-heading">Explainability</div>
+            <p id="explainText" class="muted">Loading explanation...</p>
+          </div>
+        </div>
+      </section>
+
+      <section class="panel right">
+        <div class="card kpi-card">
+          <div class="section-heading">Key KPIs</div>
+          <div class="kpi-grid" id="kpiGrid"></div>
+        </div>
+        <div class="card recommendations">
+          <div class="section-heading">Recommendations</div>
+          <div id="recList" class="rec-list"></div>
+        </div>
+      </section>
+    </main>
+  </div>
+  <script src="app.js"></script>
+</body>
+</html>

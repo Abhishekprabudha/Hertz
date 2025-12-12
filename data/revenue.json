@@ -1,0 +1,15 @@
+{
+  "kpis": [
+    {"label": "Yield per Day", "value": "$78", "delta": "+4.6%", "tone": "good"},
+    {"label": "Forecast Error", "value": "-6%", "delta": "-2%", "tone": "good"},
+    {"label": "Promo Uptake", "value": "24%", "delta": "+1.2%", "tone": "warn"},
+    {"label": "Upgrade Mix", "value": "17%", "delta": "-0.5%", "tone": "warn"}
+  ],
+  "recommendations": [
+    {"tag": "Pricing", "text": "Tighten discounts in coastal leisure markets.", "why": "Demand curve remains inelastic for the next 48 hours."},
+    {"tag": "Ancillary", "text": "Promote EV upgrades with bundled charging credits.", "why": "Improves yield and EV utilisation simultaneously."}
+  ],
+  "mapBadges": ["High leisure demand", "Weather surge"],
+  "chartText": "Revenue curve steepening with strong weekend bookings.",
+  "explain": "Micro-demand signals support firmer pricing while protecting loyalty segments from overexposure."
+}
