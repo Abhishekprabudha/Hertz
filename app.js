@@ -6,7 +6,6 @@ const state = {
   cache: {},
   playing: false,
   voiceReady: false,
-  errored: false,
 };
 
 const scenarioOrder = ['normal', 'disrupt', 'correct'];
@@ -19,6 +18,9 @@ const baseVehicles = [
   { id: 'ADL-14', label: 'Truck', top: 70, left: 32 },
   { id: 'PER-30', label: 'Van', top: 70, left: 8 }
 ];
+
+  cache: {}
+};
 
 async function loadJSON(path) {
   const res = await fetch(path);
@@ -66,6 +68,13 @@ function renderTabs() {
     btn.className = state.activeTab === tab.id ? 'active' : '';
     btn.addEventListener('click', () => setActiveTab(tab.id));
     bar.appendChild(btn);
+  });
+}
+
+function renderScenarioControls() {
+  document.querySelectorAll('.scenario-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.scenario === state.activeScenario);
+    btn.onclick = () => setScenario(btn.dataset.scenario);
   });
 }
 
@@ -160,23 +169,6 @@ function renderAll(data) {
   renderRecommendations(data);
 }
 
-function renderError(message) {
-  const narration = document.getElementById('narrationText');
-  const signals = document.getElementById('signalList');
-  const chart = document.getElementById('chartText');
-  const explain = document.getElementById('explainText');
-  const recs = document.getElementById('recList');
-  const kpis = document.getElementById('kpiGrid');
-
-  narration.textContent = message;
-  chart.textContent = 'Unable to load data.';
-  explain.textContent = 'Please refresh once connectivity is restored.';
-
-  signals.innerHTML = '';
-  recs.innerHTML = '';
-  kpis.innerHTML = '';
-}
-
 async function setActiveTab(tabId) {
   if (state.activeTab === tabId) return;
   state.activeTab = tabId;
@@ -188,6 +180,10 @@ async function setScenario(scenario, { force = false } = {}) {
   if (!force && state.activeScenario === scenario) return;
   state.activeScenario = scenario;
   document.getElementById('scenarioPill').textContent = scenario.charAt(0).toUpperCase() + scenario.slice(1);
+async function setScenario(scenario) {
+  if (state.activeScenario === scenario) return;
+  state.activeScenario = scenario;
+  renderScenarioControls();
   renderNarration();
   await loadAndRender();
 }
@@ -234,29 +230,22 @@ function speakNarration(text) {
 }
 
 async function playStory() {
-  if (state.playing || state.errored) return;
+  if (state.playing) return;
   state.playing = true;
   const btn = document.getElementById('playScenario');
   const status = document.getElementById('playStatus');
   btn.classList.add('playing');
-  btn.setAttribute('disabled', 'disabled');
-  btn.setAttribute('aria-busy', 'true');
   status.textContent = 'Playing narrated journey...';
 
-  try {
-    for (const scenario of scenarioOrder) {
-      await setScenario(scenario, { force: true });
-      await speakNarration(state.scenarios[scenario].narration);
-      await wait(1800);
-    }
-
-    status.textContent = 'Completed — replay anytime';
-  } finally {
-    btn.classList.remove('playing');
-    btn.removeAttribute('disabled');
-    btn.removeAttribute('aria-busy');
-    state.playing = false;
+  for (const scenario of scenarioOrder) {
+    await setScenario(scenario, { force: true });
+    await speakNarration(state.scenarios[scenario].narration);
+    await wait(1800);
   }
+
+  status.textContent = 'Completed — replay anytime';
+  btn.classList.remove('playing');
+  state.playing = false;
 }
 
 function hookPlayButton() {
@@ -265,33 +254,25 @@ function hookPlayButton() {
 }
 
 async function init() {
-  try {
-    [state.config, state.scenarios] = await Promise.all([
-      loadJSON('data/config.json'),
-      loadJSON('data/scenarios.json')
-    ]);
+  [state.config, state.scenarios] = await Promise.all([
+    loadJSON('data/config.json'),
+    loadJSON('data/scenarios.json')
+  ]);
 
-    const brand = document.querySelector('.brand');
-    if (brand && state.config.title) brand.textContent = state.config.title;
+  state.activeTab = state.config.defaultTab;
+  state.activeScenario = state.config.defaultScenario;
 
-    state.activeTab = state.config.defaultTab;
-    state.activeScenario = state.config.defaultScenario;
+  renderTabs();
+  hookPlayButton();
 
-    renderTabs();
-    hookPlayButton();
-
-    if ('speechSynthesis' in window) {
-      speechSynthesis.addEventListener('voiceschanged', () => {
-        state.voiceReady = true;
-      });
-    }
-
-    await loadAndRender();
-  } catch (err) {
-    console.error('Failed to initialise app', err);
-    state.errored = true;
-    renderError('Unable to load configuration. Please verify hosting via a web server.');
+  if ('speechSynthesis' in window) {
+    speechSynthesis.addEventListener('voiceschanged', () => {
+      state.voiceReady = true;
+    });
   }
+
+  renderScenarioControls();
+  await loadAndRender();
 }
 
 document.addEventListener('DOMContentLoaded', init);
