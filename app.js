@@ -19,6 +19,9 @@ const baseVehicles = [
   { id: 'PER-30', label: 'Van', top: 70, left: 8 }
 ];
 
+  cache: {}
+};
+
 async function loadJSON(path) {
   const res = await fetch(path);
   if (!res.ok) throw new Error(`Failed to load ${path}`);
@@ -65,6 +68,13 @@ function renderTabs() {
     btn.className = state.activeTab === tab.id ? 'active' : '';
     btn.addEventListener('click', () => setActiveTab(tab.id));
     bar.appendChild(btn);
+  });
+}
+
+function renderScenarioControls() {
+  document.querySelectorAll('.scenario-btn').forEach(btn => {
+    btn.classList.toggle('active', btn.dataset.scenario === state.activeScenario);
+    btn.onclick = () => setScenario(btn.dataset.scenario);
   });
 }
 
@@ -170,6 +180,10 @@ async function setScenario(scenario, { force = false } = {}) {
   if (!force && state.activeScenario === scenario) return;
   state.activeScenario = scenario;
   document.getElementById('scenarioPill').textContent = scenario.charAt(0).toUpperCase() + scenario.slice(1);
+async function setScenario(scenario) {
+  if (state.activeScenario === scenario) return;
+  state.activeScenario = scenario;
+  renderScenarioControls();
   renderNarration();
   await loadAndRender();
 }
@@ -257,6 +271,7 @@ async function init() {
     });
   }
 
+  renderScenarioControls();
   await loadAndRender();
 }
 

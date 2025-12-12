@@ -37,4 +37,5 @@ A single-page, static “Mobility Control Tower” that unifies five AI demos (F
 - A single **Play story** button narrates the end-to-end journey (Normal → Disrupt → Correct) using the browser Speech Synthesis API with a female voice when available.
 - Scenario playback adjusts the base dataset on the fly (adding badges, prepending recommendations, shifting KPI tone) without extra files per scenario.
 - The map uses open-source OpenStreetMap tiles focused on eastern Australia with animated vehicle markers that drift as scenarios change.
+- Scenario toggles adjust the base dataset on the fly (adding badges, prepending recommendations, and shifting KPI tone) without needing extra files per scenario.
 - Vanilla HTML/CSS/JS only—no build steps or external dependencies—ensuring GitHub Pages compatibility.
