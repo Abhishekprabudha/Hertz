@@ -1,0 +1,15 @@
+{
+  "kpis": [
+    {"label": "NPS", "value": "+18", "delta": "+2", "tone": "good"},
+    {"label": "Chargeback Rate", "value": "1.4%", "delta": "-0.3%", "tone": "good"},
+    {"label": "Review Lag", "value": "9.5h", "delta": "-1.1h", "tone": "warn"},
+    {"label": "Risk Flags", "value": "27", "delta": "+4", "tone": "warn"}
+  ],
+  "recommendations": [
+    {"tag": "Customer", "text": "Push concierge check-in for high-value arrivals.", "why": "Protects NPS while queues form at counters."},
+    {"tag": "Risk", "text": "Auto-verify payment risk for bookings with frequent reroutes.", "why": "Prevents late-stage cancellations and exposure."}
+  ],
+  "mapBadges": ["Counter relief active", "High-touch guests"],
+  "chartText": "NPS holding strong; risk signals rising in select corridors.",
+  "explain": "Counter strategies and automated verification keep risk manageable while sustaining front-line satisfaction."
+}

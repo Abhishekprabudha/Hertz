@@ -1,0 +1,15 @@
+{
+  "kpis": [
+    {"label": "On-time Returns", "value": "88%", "delta": "-1.5%", "tone": "warn"},
+    {"label": "Turnaround", "value": "38 min", "delta": "+3 min", "tone": "bad"},
+    {"label": "Shop Capacity", "value": "76%", "delta": "+5%", "tone": "good"},
+    {"label": "Roadside Events", "value": "12", "delta": "-3", "tone": "good"}
+  ],
+  "recommendations": [
+    {"tag": "Ops", "text": "Prioritise fast-lane cleaning for airport arrivals in next 2 hours.", "why": "Reduces backlog risk while crews are staffed."},
+    {"tag": "Network", "text": "Re-route mobile service vans to city fringe lots.", "why": "Keeps downtime low where capacity is tightening."}
+  ],
+  "mapBadges": ["Turnaround monitor", "Staffing stable"],
+  "chartText": "Ops throughput steady but showing pockets of queueing at peak windows.",
+  "explain": "Late returns and cleaning delays require short-term prioritisation; staffing remains within plan."
+}
